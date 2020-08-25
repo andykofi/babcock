@@ -15,7 +15,7 @@ public class Vehicle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "regNumber", nullable = false)
+    @Column(name = "regnumber", nullable = false)
     private String regNumber;
 
     @Column(name = "category", nullable = false)
@@ -27,26 +27,19 @@ public class Vehicle {
     @Column(name = "make", nullable = false)
     private String make;
 
-    @Column(name = "fuelType", nullable = false)
+    @Column(name = "fueltype", nullable = false)
     private String fuelType;
 
-    @Column(name = "hiredOut", nullable = false)
+    @Column(name = "hiredout", nullable = false)
     private boolean hiredOut;
 
-    @Column(name = "pricePerDay", nullable = false)
+    @Column(name = "priceperday", nullable = false)
     private double pricePerDay;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private Date hireDate;
+    private Date hiredate;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private Date endDate;
-
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "booking_id", nullable = false)
-    @JsonIgnore   // This breaks the infinite recursion problem
-    private Booking booking;
-
-
+    private Date enddate;
 
     public Vehicle() {
 
@@ -61,8 +54,8 @@ public class Vehicle {
         this.fuelType = fuelType;
         this.hiredOut = hiredOut;
         this.pricePerDay = pricePerDay;
-        this.hireDate = hireDate;
-        this.endDate = endDate;
+        this.hiredate = hireDate;
+        this.enddate = endDate;
     }
 
     public Long getId() {
@@ -129,33 +122,28 @@ public class Vehicle {
         this.pricePerDay = pricePerDay;
     }
 
-    public Date getHireDate() {
-        return hireDate;
+    public Date getHiredate() {
+        return hiredate;
     }
 
-    public void setHireDate(Date hireDate) {
-        this.hireDate = hireDate;
+    public void setHiredate(Date hiredate) {
+        this.hiredate = hiredate;
     }
 
-    public Date getEndDate() {
-        return endDate;
+    public Date getEnddate() {
+        return enddate;
     }
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public void setEnddate(Date enddate) {
+        this.enddate = enddate;
     }
+
+
 
     public boolean isHiredOut() {
         return hiredOut;
     }
 
-    public Booking getBooking() {
-        return booking;
-    }
-
-    public void setBooking(Booking booking) {
-        this.booking = booking;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -187,8 +175,8 @@ public class Vehicle {
                 ", fuelType=" + fuelType +
                 ", hiredOut=" + hiredOut +
                 ", pricePerDay=" + pricePerDay +
-                ", hireDate=" + hireDate +
-                ", endDate=" + endDate +
+                ", hireDate=" + hiredate +
+                ", endDate=" + enddate +
                 '}';
     }
 }

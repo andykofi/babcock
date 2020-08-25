@@ -1,49 +1,60 @@
 package com.babcok.test.service;
 
-
-import com.babcok.test.dto.VehicleDto;
-import com.babcok.test.mapper.VehicleMapper;
+import com.babcok.test.dto.HiringCostDto;
+import com.babcok.test.model.Vehicle;
 import com.babcok.test.repository.VehicleRepository;
+import java.time.LocalDate;
+import static java.time.temporal.ChronoUnit.DAYS;
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.data.repository.query.Param;
 
 
 @Service
 public class VehicleService  {
 
-   private VehicleRepository vehicleRepository;
+    private VehicleRepository vehicleRepository;
 
-   @Autowired
-   public VehicleService(VehicleRepository vehicleRepository) {
-       this.vehicleRepository = vehicleRepository;
-   }
+    @Autowired
+    public VehicleService(VehicleRepository vehicleRepository) {
+        this.vehicleRepository = vehicleRepository;
+    }
 
-   public List<VehicleDto> findAll() {
-       return vehicleRepository.findAll().stream().map(VehicleMapper:: toDto)
-               .collect(Collectors.toList());
-   }
+    public List<Vehicle> findAll() {
+        return vehicleRepository.findAll();
+    }
 
-   public List<VehicleDto> findAllByModel(String model) {
-       return  vehicleRepository.findAllByModel(model).stream().map(VehicleMapper:: toDto)
-               .collect(Collectors.toList());
-   }
 
-   public VehicleDto findById(Long id) {
-       return  VehicleMapper.toDto(vehicleRepository.findById(id).get());
-   }
+    public Vehicle findById(Long id) {
+        return  vehicleRepository.findById(id).get();
+    }
 
-   public VehicleDto save(VehicleDto vehicleDto) {
-       vehicleRepository.save(VehicleMapper.toEntry(vehicleDto));
-       return null;
-   }
+    public Vehicle save(Vehicle vehicle) {
+        vehicle= vehicleRepository.save(vehicle);
+        return vehicle;
+    }
 
-   public VehicleDto calculateCost() {
-       // To be done later;
-       return null;
-   }
+    public List<Vehicle> listVehicleAvailableForHireToday(@Param("today")Date today){
+        return vehicleRepository.listVehicleAvailableForHireToday(today);
+    }
+
+    public HiringCostDto calculateCost(long id, String startDate,String endDate) {
+
+        Vehicle vehicle=findById(id);
+        LocalDate stDate = LocalDate.parse(startDate);
+        LocalDate endate = LocalDate.parse(endDate);
+
+        long noOfDaysBetween = DAYS.between(stDate, endate);
+        HiringCostDto hiringCostDto=new HiringCostDto();
+        hiringCostDto.setId(vehicle.getId());
+        hiringCostDto.setNumberOfDays((int)noOfDaysBetween);
+        hiringCostDto.setTotalCost(noOfDaysBetween*vehicle.getPricePerDay());
+
+        return hiringCostDto;
+    }
 
 
 }
